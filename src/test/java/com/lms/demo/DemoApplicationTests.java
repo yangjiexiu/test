@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -16,6 +18,8 @@ class DemoApplicationTests {
     JavaMailSender sender;
     @Value("${spring.mail.username}")
     String mailName;
+    @Autowired
+    StringRedisTemplate redisTemplate;
 
     @Test
     void contextLoads() {
@@ -37,6 +41,12 @@ class DemoApplicationTests {
         message.setFrom(mailName);
         //OK，万事俱备只欠发送
         sender.send(message);
+    }
+    @Test
+    void testRedis() {
+        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+        ops.set("yjx","1");
+        System.out.println(ops.get("yjx"));
     }
 
 
